@@ -8,7 +8,7 @@ METADATA_PATH = "data/metadata.csv"
 
 os.makedirs(FRAME_DIR, exist_ok=True)
 
-TARGET_FRAMES_PER_VIDEO = 30   # <-- guarantees 20–50 frames
+TARGET_FRAMES_PER_VIDEO = 30
 
 print("Looking for videos in:", VIDEO_DIR)
 videos = os.listdir(VIDEO_DIR)
