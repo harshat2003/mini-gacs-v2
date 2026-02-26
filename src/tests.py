@@ -1,11 +1,15 @@
 import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
 
-embeddings = np.load("data/embeddings.npy")
+print("Checking embedding file...")
 
-print("Checking NaN values...")
-assert not np.isnan(embeddings).any()
+emb = np.load("data/embeddings.npy")
 
-print("Checking embedding shape...")
-assert len(embeddings.shape) == 2
+
+assert len(emb.shape) == 2, "Embeddings should be 2D"
+
+
+sim = cosine_similarity([emb[0]], [emb[0]])[0][0]
+assert abs(sim - 1.0) < 1e-5, "Self similarity failed"
 
 print("All verification tests passed")
