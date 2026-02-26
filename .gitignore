@@ -7,7 +7,13 @@ data/frames/
 data/videos/
 *.mp4
 *.jpg
+
+# Ignore ALL png files
 *.png
+
+# But allow the example output image
+!results/
+!results/heatmap.png
 
 # Generated outputs
 *.npy

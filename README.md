@@ -2,24 +2,25 @@ Mini GACS Prototype – Mood & Style Embedding Pipeline
 
 A verification-first affective computing prototype inspired by GenTA GACS
 
-1. Problem Framing (GenTA Context)
+## Example Output
 
-Marketing creatives and contemporary art communicate emotion before meaning.
-Humans perceive this as vibe — mood, tone, atmosphere, visual energy.
+![Heatmap](results/heatmap.png)
 
-Traditional ML systems classify objects.
-But GenTA’s GACS aims to measure perceptual similarity of feeling.
+Overview
 
-This project demonstrates a minimal pipeline that answers:
+This project demonstrates a minimal affective-computing pipeline that compares the perceived vibe (mood/style) of visual content.
 
-Do two visuals feel similar even if they are not visually identical?
+Instead of classifying objects (car, person, product), the system compares semantic similarity between frames using embeddings from a pretrained vision model.
 
-Instead of labels like cat or car, we compare embedding space proximity.
+Goal:
 
-2. Approach
+Determine whether two visuals feel similar even if they are visually different.
 
-We approximate "vibe similarity" using a pretrained multimodal model (CLIP).
-CLIP embeddings encode high-level semantics such as:
+Key Idea
+
+We approximate emotional similarity using embedding distance.
+
+CLIP embeddings capture high-level properties such as:
 
 lighting mood
 
@@ -29,88 +30,26 @@ color tone
 
 aesthetic style
 
-scene atmosphere
+atmosphere
 
-Similarity in embedding space ≈ similarity in perceived feeling.
+Similarity in embedding space ≈ similarity in perceived feeling
 
+Pipeline
 
-3. Pipeline Architecture
-Step 1 — Data Ingestion
+Load short art/marketing videos
 
-Input: 2–3 short art / marketing videos
+Extract representative frames at intervals
 
-We sample frames at time intervals to represent visual moments rather than every frame.
+Generate embeddings using CLIP
 
-Why:
+Compute cosine similarity between frames
 
-Consecutive frames are redundant; vibe changes slower than pixels.
+Retrieve similar frames + visualize heatmap
 
-Step 2 — Frame Extraction
-
-We extract frames every N seconds and store metadata.
-
-Output:
-
-video_id | timestamp | frame_path
-
-Verification:
-
-Checked FPS fallback
-
-Ensured videos load correctly
-
-Verified extracted frame counts
-
-Step 3 — Embedding Generation
-
-We use OpenAI CLIP (ViT-B/32) via HuggingFace + PyTorch.
-
-For each frame:
-
-image → CLIP encoder → 768-dim vector
-
-Verification steps:
-
-Assert embedding shape (N, 768)
-
-Check NaN values
-
-Ensure deterministic output
-
-Confirm identical image → identical embedding
-
-Step 4 — Similarity Computation
-
-We compute pairwise cosine similarity:
-
-Similarity(A,B)=(A⋅B)/(∣∣A∣∣∣∣B∣∣)
-
-Meaning:
-
-1.0 → same vibe
-
-~0.9 → visually consistent
-
-~0.7 → related style
-
-<0.5 → different mood
-
-Step 5 — Retrieval + Visualization
-
-Outputs:
-
-Top-5 similar frames for multiple queries
-
-Similarity heatmap
-
-Interpretation:
-Clusters in heatmap represent consistent emotional tone segments.
-
-
-4. Repository Structure
+Repository Structure
 src/
   extract_frames.py      # video → frames
-  compute_embeddings.py  # frames → CLIP embeddings
+  compute_embeddings.py  # frames → embeddings
   similarity.py          # retrieval + heatmap
   tests.py               # verification checks
 
@@ -120,112 +59,91 @@ data/ (ignored in git)
   metadata.csv
   embeddings.npy
   index.json
-5. How to Run
+
+results/
+  heatmap.png
+How to Run
 pip install -r requirements.txt
 
 python src/extract_frames.py
 python src/compute_embeddings.py
 python src/similarity.py
 python src/tests.py
-6. Verification-First Engineering
+Verification-First Engineering
 
-Instead of assuming correctness, the pipeline validates:
+The pipeline validates correctness instead of assuming it.
 
 Check	Purpose
-File existence	prevents silent failure
-FPS fallback	robustness to corrupted videos
-Embedding shape	model output validation
-NaN detection	numerical stability
-Self-similarity	sanity test
-Retrieval consistency	semantic correctness
+File existence	Prevent silent failures
+FPS fallback	Handle corrupted videos
+Embedding shape	Model output validation
+NaN detection	Numerical stability
+Self similarity	Sanity test
+Retrieval consistency	Semantic correctness
 
-Result:
+All verification tests pass successfully.
 
-All verification tests passed
-7. Use of AI Coding Tools (Audited)
+Limitations
 
-AI assistants (ChatGPT/Copilot) were used for:
+Visual only (no audio)
 
-boilerplate PyTorch loading
+No temporal modeling
 
-initial similarity calculation structure
+Frame-independent analysis
 
-plotting template
-
-Human validation performed:
-
-fixed incorrect HF output type handling
-
-corrected embedding loop bug
-
-added verification assertions
-
-handled single-frame edge cases
-
-debugged index mismatch
-
-enforced reproducible structure
-
-Final architecture decisions and debugging were manual.
-
-8. Limitations
-
-Current system:
-
-visual only
-
-frame-level independent
-
-no temporal understanding
-
-no audio mood cues
-
-similarity ≠ human emotion ground truth
+Similarity ≠ human emotion ground truth
 
 This is a perceptual proxy, not emotion classification.
 
-9. Toward a Real GACS Engine
+Toward a Real GACS Engine
 
-This prototype can evolve into a marketing intelligence system:
+Future extensions:
 
-Step 1 — Multimodal Affect
+Multimodal affect
 
-Add audio embeddings:
-
-music tone
+audio tone
 
 speech energy
 
 rhythm intensity
 
-Step 2 — Temporal Mood Curve
+Temporal modeling
 
-Track emotional progression across time:
+emotional progression across time
 
-calm → tension → excitement → resolution
-Step 3 — Performance Feedback Loop
+Performance learning
+Connect embeddings to:
 
-Connect embeddings to ad metrics:
+CTR
 
-Metric	What model learns
-CTR	attention grabbing visuals
-Watch time	emotional engagement
-ROAS	persuasive aesthetics
+watch time
 
-Model learns:
+ROAS
 
-which "feel" converts best
+Learn which feel performs best.
 
-10. Key Insight
+Use of AI Tools
 
-This project demonstrates a shift:
+AI assistants (ChatGPT/Copilot) were used for scaffolding.
 
-From object recognition → perception modeling
+All outputs were manually verified:
 
-Instead of asking:
+fixed model output handling
+
+corrected embedding loop
+
+added assertions & tests
+
+handled edge cases
+
+Architecture and debugging decisions were human-validated.
+
+Key Insight
+
+Traditional vision systems answer:
 
 What is in the image?
 
-We ask:
+This system asks:
 
-How does it feel?
+How does the image feel?
