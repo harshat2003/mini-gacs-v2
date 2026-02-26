@@ -65,10 +65,12 @@ results/
 How to Run
 pip install -r requirements.txt
 
+```bash
 python src/extract_frames.py
 python src/compute_embeddings.py
 python src/similarity.py
 python src/tests.py
+```
 Verification-First Engineering
 
 The pipeline validates correctness instead of assuming it.
@@ -147,3 +149,11 @@ What is in the image?
 This system asks:
 
 How does the image feel?
+
+## Design Choice
+
+CLIP was selected because affective similarity is semantic, not pixel-level.
+Traditional features such as color histograms or classification logits cannot capture aesthetic tone.
+
+Embedding distance is treated as a perceptual proxy — not emotion prediction.
+This aligns with the GACS philosophy of measuring *feel* rather than labeling emotion.
