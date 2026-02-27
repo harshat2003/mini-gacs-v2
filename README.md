@@ -46,6 +46,16 @@ Compute cosine similarity between frames
 
 Retrieve similar frames + visualize heatmap
 
+## Cross-Video Similarity Result
+
+The system compares overall mood between videos by averaging frame embeddings.
+
+Example output:
+
+video1.mp4 ↔ video2.mp4 : 0.526
+
+This indicates the videos share partial stylistic similarity but different visual tone, demonstrating perceptual comparison rather than object recognition.
+
 Repository Structure
 src/
   extract_frames.py      # video → frames
