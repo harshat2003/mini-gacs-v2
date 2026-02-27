@@ -62,6 +62,7 @@ src/
   compute_embeddings.py  # frames → embeddings
   similarity.py          # retrieval + heatmap
   tests.py               # verification checks
+  video_similarity.py    #similarity betwwen both the videos
 
 data/ (ignored in git)
   videos/
@@ -80,6 +81,7 @@ python src/extract_frames.py
 python src/compute_embeddings.py
 python src/similarity.py
 python src/tests.py
+python src/video_similarity.py
 ```
 Verification-First Engineering
 
