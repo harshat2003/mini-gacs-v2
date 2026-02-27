@@ -167,3 +167,16 @@ Traditional features such as color histograms or classification logits cannot ca
 
 Embedding distance is treated as a perceptual proxy — not emotion prediction.
 This aligns with the GACS philosophy of measuring *feel* rather than labeling emotion.
+
+# Example Result Interpretation
+
+Two different videos were compared using cross-video embedding similarity.
+
+Observed similarity score:
+video1 ↔ video2 ≈ 0.52
+
+Meaning:
+The videos are visually different but share partial aesthetic tone 
+(color palette / lighting / composition).
+
+This demonstrates the system measures perceptual similarity rather than object identity.
